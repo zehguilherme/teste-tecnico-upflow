@@ -1,9 +1,9 @@
-<!-- BEGIN:nextjs-agent-rules -->
+## Referência de design
 
-## Esta NÃO é a versão do Next.js que você conhece
+- Ao criar ou alterar interfaces, siga sempre o design do [projeto Upflow — Catálogo de Filmes no Stitch](https://stitch.withgoogle.com/projects/9710530646483095648), incluindo cores, tipografia, espaçamentos, componentes e Header.
+- As imagens usadas como base para criar o layout no Stitch estão na pasta [stitch](design-references/stitch/).
 
-Esta versão contém mudanças incompatíveis — as APIs, convenções e estrutura de arquivos podem ser diferentes daquelas presentes nos seus dados de treinamento. Antes de escrever qualquer código, leia o guia relevante em `node_modules/next/dist/docs/` (resolvido a partir do diretório deste arquivo; em monorepos, o pacote `next` pode não estar visível na raiz do repositório). Observe os avisos de descontinuação.
+## Regras de Git
 
-Este bloco é escrito e adicionado novamente por `next dev` — confira em `node_modules/next/dist/server/lib/generate-agent-files.js`. Removê-lo de um diff apenas recria a alteração não commitada; incluí-lo no commit junto com seu trabalho mantém a árvore de trabalho limpa.
-
-<!-- END:nextjs-agent-rules -->
+- Escreva todas as mensagens de commit em português e siga o padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/).
+- Não execute operações Git — incluindo commit, push, merge, rebase ou criação de PR — sem autorização explícita do usuário.
