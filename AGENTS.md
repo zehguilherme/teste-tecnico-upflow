@@ -2,6 +2,10 @@
 
 - Escreva em português o conteúdo de todos os arquivos Markdown (`.md`) do projeto.
 
+## README
+
+- Ao verificar alterações pertinentes no projeto que precisem ser refletidas na documentação, atualize as informações correspondentes no `README.md`.
+
 ## Nomes de componentes
 
 - Ao criar, renomear ou revisar nomes de componentes de interface, seguir a skill `component-naming-pascalcase`.
