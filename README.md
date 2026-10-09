@@ -8,3 +8,7 @@
 - Ordenação por popularidade, nota e data de lançamento;
 - Página de detalhe em `/movie/[id]`: sinopse, nota, elenco principal e trailer, quando houver;
 - Favoritos: persistência no client e uma página ou aba que liste os favoritos.
+
+## Acompanhamento
+
+As alterações no projeto podem ser acompanhadas no [GitHub Projects](https://github.com/users/zehguilherme/projects/18).
