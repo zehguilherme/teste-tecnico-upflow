@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prebuild": "npm run format:check",
     "build": "next build",
     "start": "next start",
+    "prelint": "npm run format:check",
     "lint": "eslint"
   },
   "dependencies": {
@@ -20,6 +24,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
+    "prettier": "3.9.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

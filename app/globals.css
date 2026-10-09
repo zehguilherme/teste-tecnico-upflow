@@ -8,6 +8,7 @@
   --color-muted: #a3a6ad;
   --color-primary: #f2b84b;
   --color-border: #2a2d34;
+  --color-border-control: #373940;
 
   --font-sans: var(--font-inter), Arial, sans-serif;
 }
