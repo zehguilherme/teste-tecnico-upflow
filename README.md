@@ -8,7 +8,8 @@ O Catálogo de Filmes é uma aplicação web para descobrir filmes populares, en
 
 ## ✨ Funcionalidades
 
-- [ ] Listagem de filmes populares com paginação;
+- [ ] Listagem de filmes populares;
+  - [ ] Paginação de resultados;
 - [ ] Busca por título;
 - [ ] Filtro por gênero;
 - [ ] Ordenação por popularidade, nota e data de lançamento;
@@ -48,7 +49,8 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
 - [Next.js 16](https://nextjs.org/) e [React 19](https://react.dev/) — aplicação web e componentes;
 - [TypeScript](https://www.typescriptlang.org/) — tipagem estática;
 - [Tailwind CSS 4](https://tailwindcss.com/) — estilos;
-- [ESLint 9](https://eslint.org/) — análise estática do código.
+- [ESLint 9](https://eslint.org/) — análise estática do código;
+- [Prettier](https://prettier.io/) — formatação dos arquivos compatíveis.
 
 ## 🏗️ Arquitetura
 
@@ -57,6 +59,8 @@ A aplicação é um frontend Next.js com App Router. A página inicial está em 
 ## 🧭 Decisões técnicas e trade-offs
 
 - **Next.js com App Router e TypeScript:** tecnologias definidas pelo enunciado, usadas como base da aplicação;
+- **Tailwind CSS:** usado para aplicar estilos diretamente nos componentes e manter cores, espaçamentos e comportamento responsivo consistentes. Isso reduz a necessidade de folhas de estilo separadas, embora possa deixar os componentes com classes extensas;
+- **Elementos nativos de formulário:** busca e filtros usam input e select do HTML, envolvidos por componentes React reutilizáveis. Isso aproveita semântica, acessibilidade e comportamento padrão do navegador; em contrapartida, a aparência dos controles pode variar entre navegadores;
 - **Aplicação frontend sem backend próprio:** a estrutura atual mantém a aplicação concentrada no Next.js; ainda não há backend nem integração com serviços externos;
 - **Persistência de favoritos:** é um requisito funcional, mas ainda não está implementado no projeto atual.
 
@@ -66,7 +70,7 @@ O projeto deve consumir a [API pública do TMDB](https://developer.themoviedb.or
 
 ## 🎨 Layout e design system
 
-As imagens de referência para as telas de filmes populares, detalhe do filme e favoritos estão em [`design-references/stitch/`](./design-references/stitch/). As cores, tipografia e estilos globais atuais estão definidos em `app/globals.css`; a interface final ainda não foi implementada.
+As imagens de referência para as telas de filmes populares, detalhe do filme e favoritos estão em [`design-references/stitch/`](./design-references/stitch/). A Home apresenta a estrutura visual de filmes populares, com busca, filtros nativos, ordenação e cards responsivos. Os dados e pôsteres são demonstrativos; busca, filtros, favoritos e paginação ainda não têm comportamento funcional. Cada card aponta para `/movie/[id]` usando um ID demonstrativo, mas a página de detalhe ainda não está implementada. As cores, tipografia e estilos globais estão definidos em `app/globals.css`; use os tokens de cor nas classes, sem valores literais nos componentes. Após alterações de interface, valide o código e a renderização em desktop e mobile com a skill [`stitch-design-validation`](./.agents/skills/stitch-design-validation/SKILL.md).
 
 ## ✅ Testes e validações
 
@@ -75,6 +79,15 @@ O projeto ainda não tem suíte de testes automatizados. Para executar a valida�
 ```bash
 npm run lint
 ```
+
+O lint e o build verificam automaticamente se os arquivos estão formatados. Para formatar todos os arquivos compatíveis ou conferir a formatação sem modificá-los, execute:
+
+```bash
+npm run format
+npm run format:check
+```
+
+No VS Code, instale a extensão recomendada **Prettier - Code formatter** (`esbenp.prettier-vscode`). O workspace a configura como formatador padrão e aplica a formatação ao salvar.
 
 ## 📁 Estrutura do projeto
 
