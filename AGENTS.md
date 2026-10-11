@@ -23,6 +23,10 @@
 
 - Use o Prettier para formatar todos os arquivos compatíveis alterados antes de concluir uma tarefa e confirme com `npm run format:check`.
 
+## Testes automatizados
+
+- A cada alteração no código, execute os testes automatizados e confirme que todos continuam passando antes de concluir a tarefa.
+
 ## Referência de design
 
 - Ao criar ou alterar interfaces, siga sempre o design do [projeto Upflow — Catálogo de Filmes no Stitch](https://stitch.withgoogle.com/projects/9710530646483095648), incluindo cores, tipografia, espaçamentos, componentes e Header.
@@ -32,6 +36,10 @@
 ## Cores
 
 - Não use cores literais em classes Tailwind, estilos inline ou CSS de componentes. Use a classe correspondente a um token definido em `app/globals.css` (`border-border`, por exemplo); mantenha os valores hexadecimais centralizados nos tokens do tema.
+
+## Cursor em elementos interativos
+
+- Use `cursor-pointer` em botões habilitados e links para indicar interação ao passar o mouse. Controles desabilitados devem manter um cursor que indique indisponibilidade.
 
 ## Regras de Git
 

@@ -1,23 +1,49 @@
+import { Suspense } from "react";
+import { connection } from "next/server";
 import { Input } from "@/components/Input";
 import { MovieCard } from "@/components/MovieCard";
 import { Select } from "@/components/Select";
+import { ErrorModal } from "@/components/ErrorModal";
+import { LoadingOverlay } from "@/components/LoadingOverlay";
+import { getPopularMovies, TmdbApiError } from "@/lib/tmdb";
 
-const movies = [
-  { id: 1, title: "O Último Horizonte", rating: "8,4", year: "2025" },
-  {
-    id: 2,
-    title: "Entre Dois Mundos",
-    rating: "7,9",
-    year: "2024",
-    isFavorite: true,
-  },
-  { id: 3, title: "A Cidade Silenciosa", rating: "8,1", year: "2023" },
-  { id: 4, title: "Depois da Tempestade", rating: "7,6", year: "2025" },
-  { id: 5, title: "Luzes da Meia-noite", rating: "8,7", year: "2022" },
-  { id: 6, title: "O Peso do Amanhã", rating: "7,8", year: "2024" },
-  { id: 7, title: "Memórias de Inverno", rating: "8,2", year: "2021" },
-  { id: 8, title: "Além do Impossível", rating: "7,5", year: "2025" },
-];
+async function PopularMovies() {
+  let movies: Awaited<ReturnType<typeof getPopularMovies>> | null;
+  let errorMessage =
+    "Não foi possível carregar os filmes. Tente novamente mais tarde.";
+
+  await connection();
+
+  try {
+    movies = await getPopularMovies(process.env.TMDB_ACCESS_TOKEN);
+  } catch (error) {
+    movies = null;
+    errorMessage = error instanceof TmdbApiError ? error.message : errorMessage;
+  }
+
+  if (movies === null) {
+    return <ErrorModal message={errorMessage} />;
+  }
+
+  if (movies.length === 0) {
+    return <p role="status">Nenhum filme popular encontrado.</p>;
+  }
+
+  return (
+    <section
+      aria-label="Filmes populares"
+      className="grid grid-cols-1 gap-x-6 gap-y-6 min-[360px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    >
+      {movies.map((movie, index) => (
+        <MovieCard
+          key={movie.id}
+          {...movie}
+          loading={index < 4 ? "eager" : "lazy"}
+        />
+      ))}
+    </section>
+  );
+}
 
 export default function Home() {
   return (
@@ -62,14 +88,9 @@ export default function Home() {
         />
       </section>
 
-      <section
-        aria-label="Filmes populares"
-        className="grid grid-cols-1 gap-x-6 gap-y-6 min-[360px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-      >
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} {...movie} />
-        ))}
-      </section>
+      <Suspense fallback={<LoadingOverlay />}>
+        <PopularMovies />
+      </Suspense>
     </main>
   );
 }
