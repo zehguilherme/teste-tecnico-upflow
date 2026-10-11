@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { HeartIcon } from "@/components/icons/HeartIcon";
 
@@ -7,6 +8,7 @@ type MovieCardProps = {
   rating: string;
   year: string;
   poster?: string;
+  loading?: "eager" | "lazy";
   isFavorite?: boolean;
 };
 
@@ -16,6 +18,7 @@ export function MovieCard({
   rating,
   year,
   poster,
+  loading = "lazy",
   isFavorite = false,
 }: MovieCardProps) {
   return (
@@ -26,11 +29,13 @@ export function MovieCard({
       >
         <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-placeholder">
           {poster ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={poster}
               alt={`Pôster de ${title}`}
-              className="h-full w-full object-cover"
+              fill
+              loading={loading}
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 360px) 50vw, 100vw"
+              className="object-cover"
             />
           ) : (
             <span className="absolute inset-0 grid place-items-center text-sm text-muted">
