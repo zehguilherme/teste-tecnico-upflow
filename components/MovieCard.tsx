@@ -25,7 +25,7 @@ export function MovieCard({
     <article className="relative min-w-0">
       <Link
         href={`/movie/${id}`}
-        className="group block rounded-xl transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+        className="group block cursor-pointer rounded-xl transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
       >
         <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-placeholder">
           {poster ? (
@@ -61,7 +61,7 @@ export function MovieCard({
         type="button"
         disabled
         aria-label={`${isFavorite ? "Remover dos" : "Adicionar aos"} favoritos: ${title}`}
-        className={`absolute right-2 top-2 grid size-11 place-items-center rounded-full bg-background/90 ${isFavorite ? "text-primary" : "text-foreground"} disabled:cursor-not-allowed`}
+        className={`absolute right-2 top-2 grid size-11 place-items-center rounded-full bg-background/90 ${isFavorite ? "text-primary" : "text-foreground"} disabled:cursor-not-allowed disabled:opacity-70`}
       >
         <HeartIcon filled={isFavorite} />
       </button>
