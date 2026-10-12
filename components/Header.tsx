@@ -41,7 +41,7 @@ export function Header({ favoritesCount = 0 }: HeaderProps) {
               type="button"
               disabled
               aria-label={`Favoritos, ${favoritesCount} filmes`}
-              className="flex cursor-not-allowed items-center gap-1 rounded-lg px-2 py-2 text-sm text-muted opacity-70 min-[360px]:gap-2 min-[360px]:px-3 sm:px-4"
+              className="flex cursor-not-allowed items-center gap-1 rounded-lg px-2 py-2 text-sm text-muted disabled:opacity-70 min-[360px]:gap-2 min-[360px]:px-3 sm:px-4"
             >
               Favoritos
               <span

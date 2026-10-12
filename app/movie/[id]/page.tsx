@@ -64,7 +64,7 @@ async function MovieDetails({
           <button
             type="button"
             disabled
-            className="inline-flex min-h-11 cursor-not-allowed items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-background"
+            className="inline-flex min-h-11 cursor-not-allowed items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-background disabled:opacity-70"
           >
             <HeartIcon />
             Adicionar aos favoritos
