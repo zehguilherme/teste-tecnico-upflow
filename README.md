@@ -18,7 +18,8 @@ O Catálogo de Filmes é uma aplicação web para descobrir filmes populares, en
   - [x] Filtro por gênero, com nomes em português;
   - [x] Ordenação decrescente por popularidade, nota e data completa de lançamento;
 - [x] Página de detalhe em `/movie/[id]` com dados do TMDB, sinopse, elenco principal e trailer quando disponível;
-- [ ] Favoritos com persistência no client e uma página ou aba que liste os favoritos.
+- [ ] Favoritos com persistência no client e listagem dos filmes favoritos;
+  - [x] Interface da página `/favorites` com estado vazio; a funcionalidade de favoritar e persistir ainda está pendente.
 
 ## 🌐 Ambientes
 
@@ -106,7 +107,7 @@ O projeto consome a [API pública do TMDB](https://developer.themoviedb.org) com
 
 ## 🎨 Layout e design system
 
-As imagens de referência para as telas de filmes populares, detalhe do filme e favoritos estão em [`design-references/stitch/`](./design-references/stitch/). A Home usa dados atuais do TMDB, com busca e filtros funcionais; favoritos e paginação continuam pendentes. Cada card aponta para `/movie/[id]`, que exibe os dados atuais do filme. O botão de favoritos da página de detalhe permanece desabilitado até a implementação desse recurso. As cores, tipografia e estilos globais estão definidos em `app/globals.css`; use os tokens de cor nas classes, sem valores literais nos componentes. Após alterações de interface, valide o código e a renderização em desktop e mobile com a skill [`stitch-design-validation`](./.agents/skills/stitch-design-validation/SKILL.md).
+As imagens de referência para as telas de filmes populares, detalhe do filme e favoritos estão em [`design-references/stitch/`](./design-references/stitch/). A Home usa dados atuais do TMDB, com busca e filtros funcionais; paginação e funcionalidade de favoritos continuam pendentes. A rota `/favorites` apresenta o estado vazio e um aviso enquanto favoritos não estiverem disponíveis. Cada card aponta para `/movie/[id]`, que exibe os dados atuais do filme. Os botões de favoritos permanecem desabilitados até a implementação desse recurso. As cores, tipografia e estilos globais estão definidos em `app/globals.css`; use os tokens de cor nas classes, sem valores literais nos componentes. Após alterações de interface, valide o código e a renderização em desktop e mobile com a skill [`stitch-design-validation`](./.agents/skills/stitch-design-validation/SKILL.md).
 
 ## ✅ Testes e validações
 

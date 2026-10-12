@@ -37,11 +37,15 @@ export function Header({ favoritesCount = 0 }: HeaderProps) {
             >
               Explorar
             </Link>
-            <button
-              type="button"
-              disabled
+            <Link
+              href="/favorites"
+              aria-current={pathname === "/favorites" ? "page" : undefined}
               aria-label={`Favoritos, ${favoritesCount} filmes`}
-              className="flex cursor-not-allowed items-center gap-1 rounded-lg px-2 py-2 text-sm text-muted disabled:opacity-70 min-[360px]:gap-2 min-[360px]:px-3 sm:px-4"
+              className={`flex cursor-pointer items-center gap-1 rounded-lg px-2 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-[360px]:gap-2 min-[360px]:px-3 sm:px-4 ${
+                pathname === "/favorites"
+                  ? "bg-surface font-semibold text-foreground"
+                  : "text-muted hover:bg-surface hover:text-foreground"
+              }`}
             >
               Favoritos
               <span
@@ -50,7 +54,7 @@ export function Header({ favoritesCount = 0 }: HeaderProps) {
               >
                 {favoritesCount}
               </span>
-            </button>
+            </Link>
           </nav>
         </div>
       </div>
