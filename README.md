@@ -13,7 +13,7 @@ O Catálogo de Filmes é uma aplicação web para descobrir filmes populares, en
   - [ ] Busca por título;
   - [ ] Filtro por gênero;
   - [ ] Ordenação por popularidade, nota e data de lançamento;
-- [ ] Página de detalhe em `/movie/[id]` com sinopse, nota, elenco principal e trailer, quando houver;
+- [x] Página de detalhe em `/movie/[id]` com dados do TMDB, sinopse, elenco principal e trailer quando disponível;
 - [ ] Favoritos com persistência no client e uma página ou aba que liste os favoritos.
 
 ## 🌐 Ambientes
@@ -64,9 +64,14 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
 - [Next.js 16](https://nextjs.org/) e [React 19](https://react.dev/) — aplicação web e componentes;
 - [TypeScript](https://www.typescriptlang.org/) — tipagem estática;
+- [Node.js](https://nodejs.org/) e [npm](https://www.npmjs.com/) — ambiente de execução e gerenciamento de dependências e scripts;
 - [Tailwind CSS 4](https://tailwindcss.com/) — estilos;
+- [Turbopack](https://nextjs.org/docs/app/api-reference/turbopack) — empacotamento da aplicação e integração com o Tailwind CSS;
+- [Jest 30](https://jestjs.io/) — testes automatizados, integrado ao Next.js com `next/jest`;
 - [ESLint 9](https://eslint.org/) — análise estática do código;
-- [Prettier](https://prettier.io/) — formatação dos arquivos compatíveis.
+- [Prettier](https://prettier.io/) — formatação dos arquivos compatíveis;
+- [API do TMDB](https://developer.themoviedb.org/) — dados e imagens dos filmes;
+- [Vercel](https://vercel.com/) — hospedagem da aplicação em produção.
 
 ## 🏗️ Arquitetura
 
@@ -83,11 +88,11 @@ A aplicação usa Next.js com App Router. A página inicial está em `app/page.t
 
 ## 🔌 API
 
-O projeto consome a [API pública do TMDB](https://developer.themoviedb.org) com `fetch` nativo no servidor e a variável `TMDB_ACCESS_TOKEN`. A Home apresenta título, nota, ano e pôster dos filmes populares. Enquanto os dados carregam, usa o componente reutilizável `LoadingOverlay`; outros fluxos assíncronos podem usá-lo como estado de carregamento. Quando a API retorna um erro, a Home abre uma modal com a mensagem específica do TMDB ou uma mensagem segura em português. A paginação ainda não foi implementada.
+O projeto consome a [API pública do TMDB](https://developer.themoviedb.org) com `fetch` nativo no servidor e a variável `TMDB_ACCESS_TOKEN`. A Home apresenta título, nota, ano e pôster dos filmes populares. A página `/movie/[id]` busca os detalhes, créditos, traduções e trailers do filme; usa o primeiro idioma disponível para a sinopse seguindo a prioridade português, inglês e idioma original. As imagens do TMDB são exibidas com `next/image`. Enquanto os dados carregam, as páginas usam o componente reutilizável `LoadingOverlay`; quando a API retorna um erro, exibem `ErrorModal` com a mensagem do TMDB ou uma mensagem segura em português. A paginação ainda não foi implementada.
 
 ## 🎨 Layout e design system
 
-As imagens de referência para as telas de filmes populares, detalhe do filme e favoritos estão em [`design-references/stitch/`](./design-references/stitch/). A Home usa dados atuais do TMDB e mantém busca, filtros, favoritos e paginação sem comportamento funcional. Cada card aponta para `/movie/[id]`, mas a página de detalhe ainda não está implementada. As cores, tipografia e estilos globais estão definidos em `app/globals.css`; use os tokens de cor nas classes, sem valores literais nos componentes. Após alterações de interface, valide o código e a renderização em desktop e mobile com a skill [`stitch-design-validation`](./.agents/skills/stitch-design-validation/SKILL.md).
+As imagens de referência para as telas de filmes populares, detalhe do filme e favoritos estão em [`design-references/stitch/`](./design-references/stitch/). A Home usa dados atuais do TMDB e mantém busca, filtros, favoritos e paginação sem comportamento funcional. Cada card aponta para `/movie/[id]`, que exibe os dados atuais do filme. O botão de favoritos da página de detalhe permanece desabilitado até a implementação desse recurso. As cores, tipografia e estilos globais estão definidos em `app/globals.css`; use os tokens de cor nas classes, sem valores literais nos componentes. Após alterações de interface, valide o código e a renderização em desktop e mobile com a skill [`stitch-design-validation`](./.agents/skills/stitch-design-validation/SKILL.md).
 
 ## ✅ Testes e validações
 
