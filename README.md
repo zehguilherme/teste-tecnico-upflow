@@ -96,6 +96,10 @@ As imagens de referência para as telas de filmes populares, detalhe do filme e 
 
 ## ✅ Testes e validações
 
+O workflow **CI** executa automaticamente em pushes para `develop` e `master` e em pull requests destinados a essas branches. Com Node.js 22, instala as dependências com `npm ci` e executa, em sequência, `npm run format:check`, `npm run lint` e `npm test -- --ci`. Qualquer falha reprova o check **Validações**. Os testes usam respostas controladas do TMDB; o workflow não precisa de token nem de secrets da API.
+
+Para impedir merges quando as verificações falharem, configure a proteção da branch ou um ruleset no GitHub e marque **Validações** como check obrigatório. O workflow executa as verificações, mas essa regra de merge precisa ser configurada no repositório.
+
 A aplicação carrega dados reais do TMDB. Nos testes com Jest, a resposta da API é substituída por respostas controladas para verificar a conversão dos filmes e o tratamento de erros, sem fazer chamadas ao TMDB. Execute-os com:
 
 ```bash
