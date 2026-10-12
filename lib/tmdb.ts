@@ -2,17 +2,22 @@ type TmdbMovie = {
   id: number;
   title: string;
   vote_average: number;
+  popularity?: number;
+  genre_ids?: number[];
   release_date?: string;
   poster_path?: string | null;
 };
 
-type MovieCardData = {
+export type MovieCardData = {
   id: number;
   title: string;
   rating: string;
   year: string;
   poster?: string;
 };
+
+export type MovieGenre = { id: number; name: string };
+export type MovieCriteria = { query: string; genre: string; sort: string };
 
 export type MovieDetails = {
   title: string;
@@ -268,6 +273,140 @@ function isTmdbMovie(movie: unknown): movie is TmdbMovie {
   );
 }
 
+function movieCardData(movie: TmdbMovie): MovieCardData {
+  return {
+    id: movie.id,
+    title: movie.title,
+    rating: movie.vote_average.toLocaleString("pt-BR", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }),
+    year: movie.release_date?.match(/^\d{4}/)?.[0] ?? "Ano não informado",
+    poster: imageUrl(movie.poster_path, "w500"),
+  };
+}
+
+export async function getMovieGenres(
+  token: string | undefined,
+  request: typeof fetch = fetch,
+): Promise<MovieGenre[]> {
+  try {
+    if (!token) throw new TmdbApiError();
+    const data = await readTmdbResponse(
+      await request(
+        "https://api.themoviedb.org/3/genre/movie/list?language=pt-BR",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "application/json",
+          },
+          next: { revalidate: 86400 },
+        },
+      ),
+    );
+    if (
+      !Array.isArray(data.genres) ||
+      !data.genres.every(
+        (genre) =>
+          isRecord(genre) &&
+          Number.isSafeInteger(genre.id) &&
+          Number(genre.id) > 0 &&
+          typeof genre.name === "string",
+      )
+    )
+      throw new TmdbApiError();
+    return data.genres as MovieGenre[];
+  } catch (error) {
+    if (error instanceof TmdbApiError) throw error;
+    throw new TmdbApiError();
+  }
+}
+
+export async function getMovies(
+  criteria: MovieCriteria,
+  token: string | undefined,
+  request: typeof fetch = fetch,
+): Promise<MovieCardData[]> {
+  const sortOptions: Record<string, string> = {
+    popularity: "popularity.desc",
+    rating: "vote_average.desc",
+    "release-date": "primary_release_date.desc",
+  };
+  if (
+    typeof criteria.query !== "string" ||
+    criteria.query.length > 200 ||
+    !Object.hasOwn(sortOptions, criteria.sort) ||
+    (criteria.genre !== "all" &&
+      (!/^\d+$/.test(criteria.genre) ||
+        !Number.isSafeInteger(Number(criteria.genre)) ||
+        Number(criteria.genre) < 1))
+  )
+    throw new TmdbApiError("Critérios de busca inválidos.");
+  const query = criteria.query.trim();
+  if (!query && criteria.genre === "all" && criteria.sort === "popularity") {
+    return getPopularMovies(token, request);
+  }
+  try {
+    if (!token) throw new TmdbApiError();
+    const params = new URLSearchParams({
+      language: "pt-BR",
+      page: "1",
+      include_adult: "false",
+    });
+    if (query) params.set("query", query);
+    else {
+      params.set("sort_by", sortOptions[criteria.sort]);
+      if (criteria.genre !== "all") params.set("with_genres", criteria.genre);
+    }
+    const data = await readTmdbResponse(
+      await request(
+        `https://api.themoviedb.org/3/${query ? "search" : "discover"}/movie?${params}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "application/json",
+          },
+          cache: "no-store",
+        },
+      ),
+    );
+    if (!Array.isArray(data.results)) throw new TmdbApiError();
+    const movies = data.results.map((entry: unknown) => {
+      if (
+        !isTmdbMovie(entry) ||
+        !isRecord(entry) ||
+        typeof entry.popularity !== "number" ||
+        !Number.isFinite(entry.popularity) ||
+        !Number.isFinite(entry.vote_average) ||
+        !Array.isArray(entry.genre_ids) ||
+        !entry.genre_ids.every(Number.isSafeInteger)
+      )
+        throw new TmdbApiError();
+      return entry as TmdbMovie & { popularity: number; genre_ids: number[] };
+    });
+    if (query) {
+      // shortcut: filtra e ordena só a página de busca atual; ampliar ao implementar paginação.
+      const filtered = movies.filter(
+        (movie) =>
+          criteria.genre === "all" ||
+          movie.genre_ids.includes(Number(criteria.genre)),
+      );
+      filtered.sort((a, b) =>
+        criteria.sort === "release-date"
+          ? (b.release_date ?? "").localeCompare(a.release_date ?? "")
+          : criteria.sort === "rating"
+            ? b.vote_average - a.vote_average
+            : b.popularity - a.popularity,
+      );
+      return filtered.map(movieCardData);
+    }
+    return movies.map(movieCardData);
+  } catch (error) {
+    if (error instanceof TmdbApiError) throw error;
+    throw new TmdbApiError();
+  }
+}
+
 export async function getPopularMovies(
   token: string | undefined,
   request: typeof fetch = fetch,
@@ -304,19 +443,7 @@ export async function getPopularMovies(
     return data.results.map((entry: unknown) => {
       if (!isTmdbMovie(entry)) throw new Error("Invalid movie");
 
-      const movie = entry;
-      return {
-        id: movie.id,
-        title: movie.title,
-        rating: movie.vote_average.toLocaleString("pt-BR", {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1,
-        }),
-        year: movie.release_date?.match(/^\d{4}/)?.[0] ?? "Ano não informado",
-        poster: movie.poster_path
-          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-          : undefined,
-      };
+      return movieCardData(entry);
     });
   } catch (error) {
     if (error instanceof TmdbApiError) throw error;

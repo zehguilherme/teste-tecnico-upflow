@@ -40,6 +40,7 @@
 ## Cursor em elementos interativos
 
 - Use `cursor-pointer` em botões habilitados e links para indicar interação ao passar o mouse. Controles desabilitados devem manter um cursor que indique indisponibilidade.
+- Campos de texto habilitados devem usar o cursor de texto (`cursor-text`); campos de seleção devem manter o cursor padrão do navegador, sem `cursor-pointer`. Controles desabilitados mantêm o cursor que indique indisponibilidade.
 
 ## Regras de Git
 
